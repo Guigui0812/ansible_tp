@@ -1,0 +1,7 @@
+---
+# defaults file for database
+
+database_user: ansible
+database_password: ansible
+database_name: ansible_tp
+database_table: ansible_tp

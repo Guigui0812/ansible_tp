@@ -1,0 +1,9 @@
+[dbservers]
+192.168.56.101 hostname=db01
+
+[webservers]
+192.168.56.102 hostname=web01
+192.168.56.103 hostname=web02
+
+[front]
+192.168.56.104 hostname=loadbalancer

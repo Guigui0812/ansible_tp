@@ -1,0 +1,40 @@
+---
+- name: Set MOTD
+  hosts: all
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: Set MOTD
+      template:
+        src: motd.j2
+        dest: /etc/motd
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Install pip
+      apt:
+        name: python3-pip
+        state: present
+
+    - name: set dependencies
+      pip:
+        name: pymysql
+        state: present
+
+- name: Setup webservers
+  hosts: webservers
+  become: yes
+  become_method: sudo
+
+  roles: 
+    - webserver
+
+- name: Setup databases
+  hosts: dbservers
+  become: yes
+  become_method: sudo
+
+  roles:
+    - database

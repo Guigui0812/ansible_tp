@@ -1,0 +1,32 @@
+---
+# tasks file for webserver
+
+- name: "Install {{ web_package }}"
+  apt:
+    name: "{{ web_package }}"
+    state: latest
+    update_cache: yes
+
+- name: Copy the page for apache2
+  template:
+    src: index_apache2.html.j2
+    dest: /var/www/html/index.html
+    owner: root
+    group: root
+    mode: 0644
+  when: web_package == "apache2"
+
+- name: Copy the page for nginx
+  template:
+    src: index_nginx.html.j2
+    dest: /var/www/html/index.html
+    owner: root
+    group: root
+    mode: 0644
+  when: web_package == "nginx"
+
+- name: "Start {{ web_package }}"
+  service:
+    name: "{{ web_package }}"
+    state: started
+

@@ -1,0 +1,42 @@
+---
+# tasks file for database
+
+- name: Install MariaDB
+  apt:
+    name: mariadb-server
+    state: latest
+    update_cache: yes
+
+- name: Start MariaDB
+  service:
+    name: mariadb
+    state: started
+
+- name: Create a database
+  mysql_db:
+    name: "{{ database_name }}"
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Create a user
+  mysql_user:
+    name: "{{ database_user }}"
+    password: "{{ database_password }}"
+    priv: "{{ database_name }}.*:ALL"
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Create a database table
+  mysql_query:
+    login_db: "{{ database_name }}"
+    login_user: "{{ database_user }}"
+    login_password: "{{ database_password }}"
+    query: "CREATE TABLE IF NOT EXISTS {{ database_table }} (id INT PRIMARY KEY NOT NULL, username VARCHAR(100))"
+
+- name: Change port to 3307
+  lineinfile:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    regexp: '^port.*'
+    line: 'port = 3307'
+    state: present
+  notify: Restart MariaDB

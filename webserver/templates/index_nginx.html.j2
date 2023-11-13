@@ -1,0 +1,7 @@
+<h1> Welcome to {{ ansible_hostname }}, an nginx server member of {{ group_names }} group </h1>
+
+<p> This server is running {{ ansible_distribution }} {{ ansible_distribution_version }} </p>
+
+{% if ansible_virtualization_type is defined %}
+    <p> This servier is virtualized using {{ ansible_virtualization_type }} </p>
+{% endif %}
